@@ -1,0 +1,21 @@
+{% extends "auth_base.html" %}
+{% block title %}Sign in — smashedburger{% endblock %}
+{% block content %}
+  <div style="font-size:0.9rem;color:#e2e4ea;margin-bottom:1.5rem;font-weight:600;">Sign in</div>
+  <form method="post">
+    <div class="field">
+      <label>Email</label>
+      <input class="auth-input" type="email" name="email" autocomplete="email" required />
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input class="auth-input" type="password" name="password" autocomplete="current-password" required />
+    </div>
+    <button class="auth-btn" type="submit">Continue</button>
+  </form>
+{% endblock %}
+{% block footer %}
+  <a class="auth-link" href="{{ url_for('auth.forgot_password') }}">Forgot password?</a>
+  &nbsp;·&nbsp;
+  <a class="auth-link" href="{{ url_for('auth.register') }}">Create account</a>
+{% endblock %}

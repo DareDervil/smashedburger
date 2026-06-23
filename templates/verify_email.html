@@ -1,0 +1,9 @@
+{% extends "auth_base.html" %}
+{% block title %}Verify email — smashedburger{% endblock %}
+{% block content %}
+  <div style="font-size:0.9rem;color:#e2e4ea;margin-bottom:0.4rem;font-weight:600;">Email verification</div>
+  <div style="font-size:0.78rem;color:#9ea3b0;">Processing your verification link…</div>
+{% endblock %}
+{% block footer %}
+  <a class="auth-link" href="{{ url_for('auth.login') }}">← Back to login</a>
+{% endblock %}

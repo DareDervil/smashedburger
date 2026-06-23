@@ -1,0 +1,19 @@
+{% extends "auth_base.html" %}
+{% block title %}Verify — smashedburger{% endblock %}
+{% block content %}
+  <div style="font-size:0.9rem;color:#e2e4ea;margin-bottom:0.4rem;font-weight:600;">Two-factor verification</div>
+  <div style="font-size:0.78rem;color:#9ea3b0;margin-bottom:1.5rem;">Enter the 6-digit code sent to your email. Valid for 5 minutes.</div>
+  <form method="post">
+    <div class="field">
+      <label>Code</label>
+      <input class="auth-input" type="text" name="code" inputmode="numeric"
+             pattern="\d{6}" maxlength="6" placeholder="000000"
+             autocomplete="one-time-code" autofocus required
+             style="letter-spacing:0.25em;font-size:1.2rem;text-align:center;" />
+    </div>
+    <button class="auth-btn" type="submit">Verify</button>
+  </form>
+{% endblock %}
+{% block footer %}
+  <a class="auth-link" href="{{ url_for('auth.login') }}">← Back to login</a>
+{% endblock %}

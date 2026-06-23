@@ -4,7 +4,7 @@ smashedburger is a proof-of-concept security consultant agent built on Claude (A
 
 Built to learn how large language models work, how to build agents, and to experiment with security tooling. It is not a commercial product, has not been security-audited, and is not hardened for production use.
 
-For a full description of the agent loop, grounded verification pass, learning loop, and self-observability, see [ARCHITECTURE.md](docs/ARCHITECTURE.md).
+For a full description of the agent loop, grounded verification pass, learning loop, and self-observability, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 

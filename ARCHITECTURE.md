@@ -87,8 +87,8 @@ Email + password (scrypt). 2FA is a time-limited 6-digit code delivered by email
 
 ```mermaid
 flowchart TD
-    U([User message]) --> S[/send route]
-    S --> CL[CVEChat<br/>agentic loop]
+    U([User message]) --> S["/send route"]
+    S --> CL["CVEChat<br/>agentic loop"]
 
     CL --> LLM[Claude Sonnet]
     LLM -->|tool_use| D[Tool dispatcher]
@@ -96,19 +96,19 @@ flowchart TD
     P -->|tool_result| LLM
     LLM -->|end_turn| DRAFT[Draft reply]
 
-    DRAFT --> GV{Grounded\nVerification}
-    GV -->|gate not met\nor no Groq key| REPLY
+    DRAFT --> GV{"Grounded<br/>Verification"}
+    GV -->|"gate not met<br/>or no Groq key"| REPLY
     GV -->|issues flagged| REV[Sonnet revises once]
     REV --> REPLY([Final reply → user])
     GV -->|no issues| REPLY
 
     DRAFT --> PP[Post-processing]
     REV --> PP
-    PP --> I1[Infra seeding\nCVE.org CPE · EUVD products]
-    PP --> I2[Action items\nHaiku extraction]
+    PP --> I1["Infra seeding<br/>CVE.org CPE · EUVD products"]
+    PP --> I2["Action items<br/>Haiku extraction"]
     PP --> I3[Telemetry events]
     PP --> I4[KEV status check]
-    PP --> I5[CVE retry queue\nif CVE.org timed out]
+    PP --> I5["CVE retry queue<br/>if CVE.org timed out"]
 ```
 
 ## Background scheduler loops
@@ -117,13 +117,13 @@ A daemon thread checks every 60 seconds for due work. Scheduling is due-based, n
 
 ```mermaid
 flowchart LR
-    SCH([Scheduler\nevery 60s])
+    SCH(["Scheduler<br/>every 60s"])
 
-    SCH --> KEV[KEV catalog sweep\ndaily · all War Room CVEs]
-    SCH --> NEWS[News monitors\nper-CVE · due-based cadence]
-    SCH --> LEARN[Learning recommendations\nSonnet · daily]
-    SCH --> OBS[Self-observability advisory\nOpus · twice daily]
-    SCH --> RETRY[CVE retry queue\ndrain due rows · backoff]
+    SCH --> KEV["KEV catalog sweep<br/>daily · all War Room CVEs"]
+    SCH --> NEWS["News monitors<br/>per-CVE · due-based cadence"]
+    SCH --> LEARN["Learning recommendations<br/>Sonnet · daily"]
+    SCH --> OBS["Self-observability advisory<br/>Opus · twice daily"]
+    SCH --> RETRY["CVE retry queue<br/>drain due rows · backoff"]
 ```
 
 ---

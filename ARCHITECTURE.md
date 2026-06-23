@@ -88,7 +88,7 @@ Email + password (scrypt). 2FA is a time-limited 6-digit code delivered by email
 ```mermaid
 flowchart TD
     U([User message]) --> S[/send route]
-    S --> CL[CVEChat\nagentic loop]
+    S --> CL[CVEChat<br/>agentic loop]
 
     CL --> LLM[Claude Sonnet]
     LLM -->|tool_use| D[Tool dispatcher]

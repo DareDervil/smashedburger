@@ -1,6 +1,6 @@
 """GV — grounded verification pass. Optional anti-hallucination gate.
 
-After Sonnet drafts a briefing, a DIFFERENT model (Groq qwen/qwen3-32b — speed +
+After Sonnet drafts a briefing, a DIFFERENT model (Groq openai/gpt-oss-120b — speed +
 error-diversity) checks the draft against the EXACT tool outputs Sonnet reasoned
 from THIS turn (the new_messages tool_result blocks + ctx.nvd_store) — it NEVER
 re-fetches. Claims that contradict or aren't supported by that corpus are flagged,
@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 # ── Groq client config ───────────────────────────────────────────────────────
 GROQ_URL   = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL = os.getenv("GROQ_MODEL", "qwen/qwen3-32b")  # reasoning model
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")  # reasoning model
 
 # Gate: only verify substantive replies (the ISSUE-H1 "don't run on thin turns"
 # lesson). Short conversational acknowledgements carry no grounded claims worth
@@ -254,7 +254,7 @@ def verify(corpus: str, draft: str) -> dict:
             {"role": "user", "content": f"SOURCE DATA:\n{corpus}\n\nDRAFT BRIEFING:\n{draft}"},
         ],
         "response_format": {"type": "json_object"},
-        # qwen3-32b is a reasoning model — keep its <think> out of the content.
+        # gpt-oss-120b is a reasoning model — keep its <think> out of the content.
         "reasoning_format": "hidden",
     }
     try:

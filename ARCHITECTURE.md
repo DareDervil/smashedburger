@@ -58,7 +58,7 @@ Email + password (scrypt). 2FA is a time-limited 6-digit code delivered by email
 |---|---|---|
 | **CVE Briefing** | User sends CVE ID | `/send` → Sonnet agentic loop → `fetch_cve` (CVE.org API) + `query_epss` + vendor advisories → stream reply → Grounded Verification → Haiku action extraction → DB persist |
 | **Streaming chat** | Every `/send` | `CVEChat.stream_reply()` generator → yields `("token", chunk)` → SSE to browser → `marked.parse()` on each chunk → `("done", reply)` finalises |
-| **Grounded Verification** | Post-reply, auto or on-demand | Groq qwen3-32b checks draft vs tool outputs → if flagged → Sonnet revises once → revised reply replaces draft in history |
+| **Grounded Verification** | Post-reply, auto or on-demand | Groq gpt-oss-120b checks draft vs tool outputs → if flagged → Sonnet revises once → revised reply replaces draft in history |
 | **War Room** | CVE conversation exists | `db.store_cve_metadata` during briefing → card shows CVSS, KEV, EUVD cross-validation |
 | **CVSS Recheck** | User clicks ↻ in War Room | `POST /cvss-recheck/<cve_id>` → re-fetches CVE.org + EUVD independently → `store_cve_metadata(force=True)` → updates panel |
 | **Attack Graph** | User opens graph screen | `GET /graph-data` → War Room CVEs + infra products + relationships → D3 force simulation → nodes coloured by type/severity → click CVE → BFS blast radius → marching-dash animation on threat edges |
@@ -198,7 +198,7 @@ The browser renders tokens progressively via `marked.parse(accumulated)` on each
 
 ## Grounded verification
 
-After Claude drafts a reply, a second model — Groq `qwen/qwen3-32b` — receives the draft and the exact `tool_result` blocks from the current turn (no re-fetching). It checks whether specific claims in the draft (scores, versions, exploitation status) are supported by the tool outputs and flags contradictions. Claude then revises once.
+After Claude drafts a reply, a second model — Groq `openai/gpt-oss-120b` — receives the draft and the exact `tool_result` blocks from the current turn (no re-fetching). It checks whether specific claims in the draft (scores, versions, exploitation status) are supported by the tool outputs and flags contradictions. Claude then revises once.
 
 The topology is: **draft → critique → revise (once)**. A referee model that accepted or rejected the draft outright was explored and rejected — it added latency without improving output quality, and it conflated two separate questions (is the draft faithful to its sources? vs were the sources complete?). Grounded verification only answers the first.
 
@@ -347,7 +347,7 @@ Key design: the `cve_records` table is keyed by `cve_id`, not `conversation_id`.
 | FIRST.org EPSS | Exploit prediction probability | — |
 | CISA KEV catalog | Daily sweep for known-exploited status | — |
 | Exa AI | IOC search, dated news monitoring, learning-rec search, package intel | `EXA_API_KEY` |
-| Groq (`qwen3-32b`) | Grounded verification critic | `GROQ_API_KEY` (optional) |
+| Groq (`gpt-oss-120b`) | Grounded verification critic | `GROQ_API_KEY` (optional) |
 | VirusTotal | File hash lookups | `VIRUSTOTAL_API_KEY` (optional) |
 | Socket.dev | Package supply-chain risk scores | `SOCKET_API_KEY` (optional) |
 | OSV (osv.dev) | Package vulnerability data (npm, PyPI) | — |
